@@ -1,9 +1,8 @@
 import json
-import os
 
 import click
-from tqdm import tqdm
-from twarc import ensure_flattened
+from twarc.decorators2 import FileSizeProgressBar
+from twarc.expansions import ensure_flattened
 
 
 @click.command()
@@ -37,7 +36,7 @@ def main(granularity, infile, outdir):
     }
     index = indices[granularity]
 
-    with tqdm(total=os.stat(infile.name).st_size, unit='B') as progress:
+    with FileSizeProgressBar(infile, None) as progress:
         for line in infile:
             for t in ensure_flattened(json.loads(line)):
                 date = t['created_at'][:index]
