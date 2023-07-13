@@ -20,7 +20,7 @@ from twarc.expansions import ensure_flattened
 )
 @click.argument('infile', type=click.File('r'), default='-')
 @click.argument('outdir', type=click.Path(exists=False))
-def main(granularity, infile, outdir):
+def divide(granularity, infile, outdir):
     '''
     Divides the input file in an output file for each temporal window.
     Each output file contains the tweets published in its temporal window.
@@ -45,7 +45,3 @@ def main(granularity, infile, outdir):
                 with open(os.path.join(outdir, date + '.jsonl'), 'a') as out:
                     out.write(json.dumps(t) + '\n')
             progress.update(len(line))
-
-
-if __name__ == '__main__':
-    main()
