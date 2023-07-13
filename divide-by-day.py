@@ -1,4 +1,5 @@
 import json
+import os
 
 import click
 from twarc.decorators2 import FileSizeProgressBar
@@ -25,6 +26,7 @@ def main(granularity, infile, outdir):
     Each output file contains the tweets published in its temporal window.
     Output files are saved in the output directory,
     and their names are the dates of the temporal windows.
+    If an output file already exists, new output is appended to the old one.
     '''
     indices = {
         'year': 4,
@@ -40,7 +42,7 @@ def main(granularity, infile, outdir):
         for line in infile:
             for t in ensure_flattened(json.loads(line)):
                 date = t['created_at'][:index]
-                with open(outdir + date + '.jsonl', 'a') as out:
+                with open(os.path.join(outdir, date + '.jsonl'), 'a') as out:
                     out.write(json.dumps(t) + '\n')
             progress.update(len(line))
 
